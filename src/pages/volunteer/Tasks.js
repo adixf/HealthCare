@@ -37,17 +37,19 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow)
 
 
-export default function Distributions() {
+export default function Tasks() {
     const history = useHistory()
     const { token } = useToken()
     const { user } = useUser()
     const [distributions, setDistributions] = useState([])
     const [delivered, setDelivered] = useState([])
     const [notDelivered, setNotDelivered] = useState([])
+    const [changeMade, setChangeMade] = useState(false)
 
     useEffect(() => {
-        const getDistributions = async adminEmail => {
+        const getDistributions = async () => {
             const distributions = await API.getAllDistributions(token)
+            console.log(distributions);
             const filtered = distributions.filter(distribution => distribution.volunteerEmail === user.email)
 
             setDelivered(filtered.filter(distribution => distribution.isDelivered))
@@ -55,10 +57,13 @@ export default function Distributions() {
         }
         
         getDistributions()
-    }, [])
+    }, [changeMade])
 
-    const distributionChecked = (distribution, value) => {
-        
+    const distributionChecked = async (distribution, value) => {
+        console.log("value", value);
+        distribution['isDelivered'] = value
+        await API.updateDistribution(token, distribution)
+        setChangeMade(true)
     }
 
 
@@ -110,7 +115,7 @@ export default function Distributions() {
                         </TableCell>
                         <TableCell >
                             <FormControlLabel
-                                control={<Checkbox checked={distribution.isDelivered} onChange={(event) => distributionChecked(distribution,event.target.value)}/>}
+                                control={<Checkbox checked={distribution.isDelivered} onChange={(event) => distributionChecked(distribution, true)}/>}
                                 label="החלוקה בוצעה"
                             />
                         </TableCell>
@@ -160,7 +165,7 @@ export default function Distributions() {
                         </TableCell>
                         <TableCell >
                             <FormControlLabel
-                                control={<Checkbox checked={distribution.isDelivered} />}
+                                control={<Checkbox checked={distribution.isDelivered} onChange={(event) => distributionChecked(distribution, false)}/>}
                                 label="החלוקה בוצעה"
                             />
                         </TableCell>

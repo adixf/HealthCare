@@ -107,7 +107,7 @@ const API = {
   userExists, signup, login, getUser, validAddress, 
   getAllVolunteers, getAllDistributions, getAllRecipients,
   createDistributions, getLonLat, recipientExists, addRecipient,
-  findClosestVolunteer, saveDistributions
+  findClosestVolunteer, saveDistributions, updateDistribution
 }
 
 export default API
