@@ -1,5 +1,5 @@
 import Map            from '../../../components/Map'
-import React          from 'react'
+import React, { useState }         from 'react'
 import { withStyles } from '@material-ui/styles'
 import { ZoomInOutlined } from '@material-ui/icons'
 import { 
@@ -13,6 +13,7 @@ import {
     Typography, 
     TableContainer,
 } from '@material-ui/core'
+import DistributionDetails from '../DistributionDetails'
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
@@ -25,8 +26,23 @@ const StyledTableRow = withStyles((theme) => ({
 
 
 export default function ViewDistributions(props) {
+
+    const getMarkers = () => {
+        // return props.distributions.map(distribution => distribution.center)
+        const markers = props.distributions.map(dist => ({
+            lat: dist.centroId[0],
+            lng: dist.centroId[1]
+        }))
+        console.log(markers);
+        return markers
+    }
+
+    const [selectedDistribution, setSelectedDistribution] = useState(props.distributions[0])
+    const [detailsOpen, setDetailsOpen] = useState(false)
+
     return (
         <React.Fragment>
+            <DistributionDetails open={detailsOpen} distribution={selectedDistribution} close={() => setDetailsOpen(false)}/>
             <Grid container spacing={2}>
 
                 <Grid item xs={12}>
@@ -43,6 +59,10 @@ export default function ViewDistributions(props) {
                                 <StyledTableRow key={index}>
                                     <TableCell >
                                     <Button 
+                                        onClick={() => {
+                                            setSelectedDistribution(distribution)
+                                            setDetailsOpen(true)
+                                        }}
                                         variant='outlined' 
                                         color='secondary' 
                                         startIcon={<ZoomInOutlined/>}
@@ -69,6 +89,9 @@ export default function ViewDistributions(props) {
                     loadingElement={<div style={{ height: `100%`, backgroundColor: 'whiteSmoke' }} />}
                     containerElement={<Paper style={{ height: `350px`, borderRadius: 20 }} />}
                     mapElement={<div style={{ height: `100%`, borderRadius: 20 }}  />}
+                    markers={getMarkers()}
+                    center={{lat: 31.76, lng: 35.21}}
+                    zoom={7}
                 ></Map> 
                 </Grid>
             </Grid>

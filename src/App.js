@@ -9,6 +9,8 @@ import {
   CssBaseline, 
   ThemeProvider, 
 } from '@material-ui/core'
+import bg_home from './photos/bg_hands2.jpg'
+import Chat from './pages/Chat'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 
@@ -18,8 +20,9 @@ export default function App() {
     <StylesProvider jss={jss}>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <Box display='flex' flexDirection='column'>
+        <Box display='flex' flexDirection='column'     >
             <Main/>
+            <Chat/>
         </Box>
       </ThemeProvider>
     </StylesProvider>
@@ -31,10 +34,3 @@ export default function App() {
 
 
 
-  //   style={{ 
-  //     backgroundImage: `url(${bg_home})`, 
-  //     minHeight: '90vh',
-  //     backgroundPosition: 'center',
-  //     backgroundRepeat: 'no-repeat',
-  //     backgroundSize: 'cover'
-  // }}

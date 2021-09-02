@@ -4,14 +4,12 @@ import { useHistory }                 from 'react-router-dom'
 import { makeStyles, withStyles }     from '@material-ui/core/styles'
 import React, { useState, useEffect } from 'react'
 import { 
-    AddOutlined,
     ArrowForward, 
     PrintOutlined, 
     ZoomInOutlined, 
 } from '@material-ui/icons'
 import {
     Box,
-    Fab,
     Table,
     Paper,
     Button,
@@ -26,7 +24,7 @@ import {
     FormControlLabel,
 } from '@material-ui/core'
 import useUser from '../../hooks/useUser'
-
+import DistributionDetails from '../admin/DistributionDetails'
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
@@ -44,42 +42,51 @@ export default function Tasks() {
     const [distributions, setDistributions] = useState([])
     const [delivered, setDelivered] = useState([])
     const [notDelivered, setNotDelivered] = useState([])
-    const [changeMade, setChangeMade] = useState(false)
 
-    useEffect(() => {
-        const getDistributions = async () => {
-            const distributions = await API.getAllDistributions(token)
-            console.log(distributions);
-            const filtered = distributions.filter(distribution => distribution.volunteerEmail === user.email)
-
-            setDelivered(filtered.filter(distribution => distribution.isDelivered))
-            setNotDelivered(filtered.filter(distribution => !distribution.isDelivered))
-        }
-        
+    useEffect(() => {   
         getDistributions()
-    }, [changeMade])
+    },[])
+
+    const getDistributions = async () => {
+        const all = await API.getAllDistributions(token)
+        console.log(all);
+        
+        const filtered = all.filter(distribution => distribution.volunteerEmail === user.email)
+        console.log(filtered);
+        setDistributions(filtered)
+
+        setDelivered(filtered.filter(distribution => distribution.isDelivered))
+        setNotDelivered(filtered.filter(distribution => !distribution.isDelivered))
+    }
 
     const distributionChecked = async (distribution, value) => {
         console.log("value", value);
         distribution['isDelivered'] = value
         await API.updateDistribution(token, distribution)
-        setChangeMade(true)
+        await getDistributions()
     }
+
+    const [selectedDistribution, setSelectedDistribution] = useState({
+        date: '',
+        adminEmail: '',
+        packages: [],
+        isDelivered: false
+    })
+    const [detailsOpen, setDetailsOpen] = useState(false)
+
 
 
     return (
         <Container dir='rtl'>
+            <DistributionDetails open={detailsOpen} distribution={selectedDistribution} close={() => setDetailsOpen(false)}/>
             <Box display='flex' style={{ marginTop: '20px'}}>
-                <Box>
-                    <IconButton onClick={() => history.push('/admins')}>
-                        <ArrowForward style={{color: 'black', fontWeight: 'bold'}}/>
-                    </IconButton>
-                </Box>
+
                 <Box flexGrow={1}>
                     <Typography variant="h5" style={{
                             fontFamily: 'Heebo',
                             fontWeight: 'bold',
-                            marginRight: '30px',
+                            marginRight: '70px',
+                            
                             marginTop: '7px'
                         }}>
                         חלוקות חדשות
@@ -94,6 +101,11 @@ export default function Tasks() {
                     <StyledTableRow key={index}>
                         <TableCell >
                             <Button 
+                             onClick={() => {
+                                setSelectedDistribution(distribution)
+                              
+                                setDetailsOpen(true)
+                            }}
                             variant='outlined' 
                             color='secondary' 
                             startIcon={<ZoomInOutlined/>}

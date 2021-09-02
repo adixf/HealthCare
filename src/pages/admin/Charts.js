@@ -1,6 +1,8 @@
+import { Container, Paper, Typography, Box, IconButton } from '@material-ui/core';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-
+import { useHistory } from 'react-router'
+import { ArrowForward } from '@material-ui/icons';
 const data = {
   labels: ['1', '2', '3', '4', '5', '6'],
   datasets: [
@@ -43,18 +45,36 @@ const options = {
       },
     ],
   },
-};
+}
 
-const MultiAxisLine = () => (
-  <>
-    <div className='header'>
-      <h1 className='title'>Multi Axis Line Chart</h1>
-      <div className='links'>
+export default function MultiAxisLine() {
 
-      </div>
-    </div>
-    <Line data={data} options={options} />
-  </>
-);
+  const history = useHistory()
 
-export default MultiAxisLine;
+  return (
+  <Container dir='rtl'>
+    <Box display='flex' style={{ marginTop: '20px'}}>
+                <Box>
+                    <IconButton onClick={() => history.push('/admins')}>
+                        <ArrowForward style={{color: 'black', fontWeight: 'bold'}}/>
+                    </IconButton>
+                </Box>
+                <Box flexGrow={1}>
+                    <Typography variant="h5" style={{
+                            fontFamily: 'Heebo',
+                            fontWeight: 'bold',
+                            marginRight: '30px',
+                            marginTop: '7px'
+                        }}>
+                         סטטיסטיקה
+                    </Typography>
+                </Box>
+                 
+            </Box>
+    <Paper >
+      <Line data={data} options={options} />
+    </Paper>
+
+  </Container>
+)
+ }

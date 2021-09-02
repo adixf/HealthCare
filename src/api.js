@@ -27,6 +27,13 @@ const addRecipient = async (token, details) => {
   })
 }
 
+const getRecipient = async (token, email) => {
+  const {data} = await Server.get(`recipient/email/${email}`, {
+    headers: {'Authorization': token}
+  })
+  return data
+}
+
 const validAddress = async (city, street, numOfBuilding) => {
   return true
 }
@@ -103,11 +110,25 @@ const updateDistribution = async (token, distribution) => {
   })
 }
 
+const newPost = async (token, post) => {
+  await Server.post('blog', post, {
+    headers: {'Authorization': token}
+  })
+}
+
+const getPosts = async (token, email) => {
+  const {data} = await Server.get(`blog/admin/${email}`, {
+    headers: {'Authorization': token}
+  })
+  return data
+}
+
 const API = {
   userExists, signup, login, getUser, validAddress, 
   getAllVolunteers, getAllDistributions, getAllRecipients,
   createDistributions, getLonLat, recipientExists, addRecipient,
-  findClosestVolunteer, saveDistributions, updateDistribution
+  findClosestVolunteer, saveDistributions, updateDistribution,
+  getRecipient, newPost, getPosts
 }
 
 export default API

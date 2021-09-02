@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { TextField, Typography, Grid, FormControlLabel, Checkbox } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
-import useToken from '../../../hooks/useToken'
 
 
 export default function ChooseDateAndArea(props) {
-
 
     return (
         <React.Fragment>

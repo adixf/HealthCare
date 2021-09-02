@@ -25,7 +25,7 @@ import {
     TableContainer,
     FormControlLabel,
 } from '@material-ui/core'
-
+import DistributionDetails from './DistributionDetails'
 
 
 const StyledTableRow = withStyles((theme) => ({
@@ -54,9 +54,19 @@ export default function Distributions() {
         getDistributions()
     }, [])
 
+    const [selectedDistribution, setSelectedDistribution] = useState({
+        date: '',
+        adminEmail: '',
+        packages: [],
+        isDelivered: false
+    })
+    const [detailsOpen, setDetailsOpen] = useState(false)
+
+
 
     return (
         <Container dir='rtl'>
+             <DistributionDetails open={detailsOpen} distribution={selectedDistribution} close={() => setDetailsOpen(false)}/>
             <Box display='flex' style={{ marginTop: '20px'}}>
                 <Box>
                     <IconButton onClick={() => history.push('/admins')}>
@@ -88,6 +98,11 @@ export default function Distributions() {
                     <StyledTableRow key={index}>
                         <TableCell >
                             <Button 
+                             onClick={() => {
+                                setSelectedDistribution(distribution)
+                              
+                                setDetailsOpen(true)
+                            }}
                             variant='outlined' 
                             color='secondary' 
                             startIcon={<ZoomInOutlined/>}

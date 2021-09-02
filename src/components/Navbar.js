@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AppBar, Toolbar, IconButton, Typography, Button, makeStyles, Badge } from '@material-ui/core'
-import { FavoriteBorder, AccountCircleOutlined, ChatOutlined } from '@material-ui/icons'
+import { FavoriteBorder, AccountCircleOutlined, ChatOutlined, BookOutlined } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,6 @@ export default function Navbar(props) {
     const classes = useStyles()
     const history = useHistory()
 
-    const forceUpdate = useForceUpdate();
 
     return(
         <div >
@@ -44,15 +43,24 @@ export default function Navbar(props) {
                     : 'לא רשום'
                 
             }
-            </Typography>
-              
+            </Typography>             
             <AccountCircleOutlined/>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                    <ChatOutlined />
-                </Badge>
-            </IconButton>
-            <Button style={{ marginRignt: 15, color: 'whitesmoke'}} onClick={() => {
+            {
+                props.user?
+                <div>
+                    <IconButton aria-label="show 4 new mails" color="inherit" onClick={() => history.push('/chat')}>            
+                        <ChatOutlined />
+                    </IconButton>
+                    <IconButton color="inherit" onClick={() => history.push('/blog')}>
+                        <Badge badgeContent={4} color="secondary">
+                            <BookOutlined />
+                        </Badge>
+                    </IconButton>
+                </div>
+                : <div/>
+            }
+            
+            <Button style={{ marginRignt: 20, color: 'whitesmoke'}} onClick={() => {
                 localStorage.clear()
                 history.push('/')
                 window.location.reload()

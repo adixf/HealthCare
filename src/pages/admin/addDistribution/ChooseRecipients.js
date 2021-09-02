@@ -31,7 +31,6 @@ export default function ChooseRecipients(props) {
     useEffect(() => {
         const setRecipients = () => {
             if(!props.allCitiesSelected) {
-                console.log(props.city);
                 props.setAllRecipients(props.allRecipients.filter(recipient => recipient.address.city === props.city))
             }
 

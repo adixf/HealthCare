@@ -16,6 +16,8 @@ import Distributions from '../pages/admin/Distributions'
 import Charts from '../pages/admin/Charts'
 import AddDistribution from '../pages/admin/addDistribution/AddDistribution'
 import AddRecipient from '../pages/admin/AddRecipient'
+import Blog from '../pages/blog/Blog'
+import Chat from '../pages/Chat'
 
 export default function Main(props) {
 
@@ -52,6 +54,12 @@ export default function Main(props) {
                     <Route path='/signup'>
                         <Signup/>
                     </Route>
+                    <Route exact path='/blog'>
+                        <Blog/>
+                    </Route>
+                    <Route exact path='/chat'>
+                        <Chat/>
+                    </Route>
                     <Route        exact path='/unauthorized'         component={Unauthorized}                              />
                     <PrivateRoute exact path='/volunteers'           component={Tasks}         auth={authenticateVolunteer}/>
                     <PrivateRoute exact path='/admins'               component={Options}       auth={authenticateAdmin}    />
@@ -61,6 +69,7 @@ export default function Main(props) {
                     <PrivateRoute exact path='/admins/charts'        component={Charts}        auth={authenticateAdmin}    />
                     <PrivateRoute exact path='/admins/distributions/add'   component={AddDistribution} auth={authenticateAdmin}  />
                     <PrivateRoute exact path='/admins/recipients/add'   component={AddRecipient} auth={authenticateAdmin}    />
+                    
                 </Switch>
             </Router>
             {/* <Footer/> */}

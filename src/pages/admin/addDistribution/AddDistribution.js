@@ -1,8 +1,8 @@
 import API                            from '../../../api'
 import BoxIcon                        from '../../../photos/box.png'
-import useToken                       from '../../../hooks/useToken'
 import useUser                        from '../../../hooks/useUser'
-import { ArrowForward, Save }               from '@material-ui/icons'
+import useToken                       from '../../../hooks/useToken'
+import { useHistory }                 from 'react-router-dom'
 import ChooseRecipients               from './ChooseRecipients'
 import ViewDistributions              from './ViewDistributions'
 import ChooseDateAndArea              from './ChooseDateAndArea'
@@ -18,10 +18,8 @@ import {
   StepLabel, 
   Container, 
   Typography,  
-  IconButton,
   makeStyles, 
 } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,27 +53,21 @@ export default function AddDistribution(props) {
     const today = () => {
       const date = new Date()
       const day =  date.getDate().toString().padStart(2, '0')
-      const month = date.getMonth().toString().padStart(2, '0')
+      const month = (date.getMonth()+1).toString().padStart(2, '0')
       const year = date.getFullYear()
       return `${year}-${month}-${day}`
     }
 
-    const [date, setDate] = useState(today)
-    const [recipients, setRecipients] = useState([])
-    const [packages, setPackages] = useState([])
-
-    const [distributions, setDistributions] = useState([])
-
-
     const [city, setCity] = useState('')
-    const [allCitiesSelected, setAllCitiesSelected] = useState(false)
+    const [date, setDate] = useState(today)
     const [cities, setCities] = useState([])
+    const [packages, setPackages] = useState([])
+    const [recipients, setRecipients] = useState([])
+    const [distributions, setDistributions] = useState([])
     const [allRecipients, setAllRecipients] = useState([])
+    const [allCitiesSelected, setAllCitiesSelected] = useState(false)
 
     const createDistributions = async () => {
-      console.log(date);
-      console.log(user.email);
-      console.log(packages);
 
       const result = await API.createDistributions(token, {
         date,
@@ -96,13 +88,13 @@ export default function AddDistribution(props) {
       await API.saveDistributions(token, distributions)
     }
 
-
     useEffect(() => {
       const init = async () => {
           const allRecipients = await API.getAllRecipients(token)
           setAllRecipients(allRecipients)
 
           setPackages(allRecipients.map(recipient => ({
+            address: recipient.address,
             recipientEmail: recipient.email,
             content: 'מזון'
           })))

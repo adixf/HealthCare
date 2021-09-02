@@ -1,19 +1,16 @@
 import React from 'react'
 import { GoogleMap, withScriptjs, withGoogleMap, Marker } from 'react-google-maps'
-import { LocationOnTwoTone} from '@material-ui/icons'
 
 function Map(props) {
-    const markers = [{
-        lat: 31, lng: 35
-    }]
+
     return (
         <GoogleMap
-            defaultZoom={7}
-            defaultCenter={{lat: 31.76, lng: 35.21}}
+            defaultZoom={props.zoom}
+            defaultCenter={props.center}
             options={{streetViewControl: false, zoomControl: false, fullscreenControl: false, mapTypeControl: false}}
         >
             {
-                markers.map((marker, index) => (
+                props.markers.map((marker, index) => (
                     <Marker key={index} position={marker} />
                 ))
             }
